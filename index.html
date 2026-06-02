@@ -1,89 +1,959 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frappe: Open Source Software</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-		<title>Sorry! We will be back soon.</title>
-		<style>
-			body {
-				font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
-				color: #36414C;
-				font-weight: 300;
-			}
+    :root {
+      --bg: #f5f4f0;
+      --surface: #eeece7;
+      --border: #d8d5ce;
+      --border-light: #e8e5de;
+      --text: #1a1915;
+      --text-muted: #7a7870;
+      --text-faint: #b0ae a8;
+      --accent: #1a1915;
+      --link: #1a1915;
+      --tag-bg: #e3e0d8;
+      --green: #2d6a4f;
+      --sidebar-w: 240px;
+      --font-mono: 'Geist Mono', 'Courier New', monospace;
+      --font-body: 'Geist', sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+    }
 
-			.page-container {
-				max-width: 800px;
-				padding: 15px;
-				vertical-align: middle;
-				position: absolute;
-				top: 50%;
-				left: 0;
-				right: 0;
-				margin: 0 auto;
-				transform: translate(0%, -50%);
-			}
+    html { font-size: 15px; scroll-behavior: smooth; }
 
-			.svg-container {
-				float: left;
-				width: 150px;
-				padding-top: 24px;
-			}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-			.message-container {
-				float: left;
-				padding-left: 15px;
-				font-size: 16px;
-				line-height: 1.6;
-			}
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 52px;
+    }
 
-			.message-container h1 {
-				font-size: 48px;
-				line-height: 1.2;
-				font-weight: 200;
-			}
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
 
-			.message-container .message {
-				color: #8D99A6;
-			}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text);
+    }
 
-			.clearfix {
-				clear: both;
-			}
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--text);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-			a {
-				color: #5E64FF;
-			}
+    .logo-mark svg { width: 16px; height: 16px; fill: var(--bg); }
 
-			@media (max-width: 767px) {
-				.svg-container {
-					float: none;
-					padding-top: 0px;
-				}
+    .logo-name {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: -0.01em;
+    }
 
-				.message-container {
-					float: none;
-					width: 100% !important;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<div class="page-container">
-			<div class="svg-container">
-				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" viewBox="0 0 32 32" version="1.1" x="0px" y="0px"><title>sad-face-avatar-boy-man-11</title><desc>Created with Sketch.</desc><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><path d="M24.5728851,23.0941141 C26.0847779,16.969087 23.5542402,12.1548858 21.4280864,11.0822754 C19.598459,12.7549171 13.9938462,17 10.2890466,17 C12.2343263,15.4384766 12.8488535,12.9394531 12.8488535,12.9394531 C12.8488535,12.9394531 10.9859461,15.7346191 7.24611965,17 C6.45154466,18.5731485 6.67682658,20.3507184 6.78659707,21.5361582 C6.84777749,21.7403698 6.95210509,22.0855229 6.99214296,22.1994274 C7.09055416,22.4793995 7.21210961,22.7924224 7.35775135,23.1301118 C7.774276,24.0958785 8.2986796,25.0616511 8.9372701,25.9603932 C10.738893,28.4959687 13.0675623,30 16,30 C18.9311427,30 21.2399187,28.4973998 23.0104666,25.9636063 C23.6381381,25.065359 24.1509411,24.1000358 24.5559252,23.1346951 C24.5616169,23.1211281 24.5672702,23.1076009 24.5728851,23.0941141 L24.5728851,23.0941141 Z M5.94669386,22.2116429 C4.61458602,20.1217921 3.13011281,13.1987617 4.62664708,8.75830078 C6.40621687,3.47802734 12.6103081,1 15.7729333,1 C18.8013894,1.00000002 21.8450169,1.93994141 23.0552307,3.80615234 C23.0552307,3.80615234 25.0915798,2.75024414 26.9020692,3.80615234 C25.0915798,4.17895508 24.887945,5.19335938 24.887945,5.19335938 C27.9234944,6.90377632 29.4577737,17.0840684 26.1082885,21.6811732 C26.0708438,21.8119773 25.9120331,22.3649335 25.857287,22.526075 C25.7549564,22.8272785 25.6289716,23.1618434 25.4780638,23.5215549 C25.0472763,24.5484017 24.5017812,25.575266 23.8301706,26.5363937 C21.888484,29.3151002 19.2996007,31 16,31 C12.7016943,31 10.0952049,29.3165313 8.12209422,26.5396068 C7.43952798,25.5789739 6.88219633,24.552559 6.43951227,23.5261382 C6.28443097,23.166562 6.15455941,22.832124 6.04872776,22.5310413 C6.02660008,22.4680898 5.98792403,22.3454665 5.94669386,22.2116429 L5.94669386,22.2116429 Z M20.6103625,20.496219 L21.7234973,21.0527864 C21.9704865,21.176281 22.0705987,21.4766175 21.9471041,21.7236068 C21.8236094,21.970596 21.5232729,22.0707082 21.2762837,21.9472136 L19.2762837,20.9472136 C18.9077594,20.7629515 18.9077594,20.2370485 19.2762837,20.0527864 L21.2762837,19.0527864 C21.5232729,18.9292918 21.8236094,19.029404 21.9471041,19.2763932 C22.0705987,19.5233825 21.9704865,19.823719 21.7234973,19.9472136 L20.6103625,20.496219 Z M11.389528,20.496219 L10.2763932,21.0527864 C10.029404,21.176281 9.92929178,21.4766175 10.0527864,21.7236068 C10.176281,21.970596 10.4766175,22.0707082 10.7236068,21.9472136 L12.7236068,20.9472136 C13.0921311,20.7629515 13.0921311,20.2370485 12.7236068,20.0527864 L10.7236068,19.0527864 C10.4766175,18.9292918 10.176281,19.029404 10.0527864,19.2763932 C9.92929178,19.5233825 10.029404,19.823719 10.2763932,19.9472136 L11.389528,20.496219 Z M14.4246316,26.7639848 C14.4725953,26.6868331 14.5938453,26.5444206 14.7863941,26.3975309 C15.1127054,26.1485979 15.512309,26 16,26 C16.487691,26 16.8872946,26.1485979 17.2136059,26.3975309 C17.4061547,26.5444206 17.5274047,26.6868331 17.5753684,26.7639848 C17.7211632,26.9985024 18.0294673,27.0704264 18.2639848,26.9246316 C18.4985024,26.7788368 18.5704264,26.4705327 18.4246316,26.2360152 C18.3171754,26.0631669 18.1191505,25.8305794 17.8201344,25.6024691 C17.3271707,25.2264021 16.7183393,25 16,25 C15.2816607,25 14.6728293,25.2264021 14.1798656,25.6024691 C13.8808495,25.8305794 13.6828246,26.0631669 13.5753684,26.2360152 C13.4295736,26.4705327 13.5014976,26.7788368 13.7360152,26.9246316 C13.9705327,27.0704264 14.2788368,26.9985024 14.4246316,26.7639848 Z" fill="#000000" sketch:type="MSShapeGroup"></path></g></svg>
-			</div>
-			<div class="message-container" style="width: calc(100% - 170px);">
-				<h1>
-					Sorry! <br>
-					We will be back soon.
-				</h1>
-				<p class="message">
-					<strong>Don't panic.</strong> It's not you, it's us.<br>
-					Most likely, our engineers are updating the code,
-					and it should take a minute for the new code to load into memory.<br><br>
-					Try refreshing after a minute or two.
-				</p>
-			</div>
-			<div class="clearfix"></div>
-		</div>
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
 
+    .topbar-nav a {
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.65rem;
+      border-radius: 5px;
+      transition: background 0.15s, color 0.15s;
+    }
 
-</body></html>
+    .topbar-nav a:hover { background: var(--surface); color: var(--text); }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-login {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.4rem 1rem;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .btn-login:hover { opacity: 0.82; }
+
+    /* ── ANNOUNCEMENT ── */
+    .announcement {
+      background: #1a1915;
+      color: #f5f4f0;
+      text-align: center;
+      padding: 0.55rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .announcement .tag {
+      background: #3a6b3a;
+      color: #90ee90;
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .announcement a { color: #f5f4f0; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 52px);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 52px;
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-section { margin-bottom: 1.5rem; }
+
+    .sidebar-label {
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .sidebar-link {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.28rem 1.25rem;
+      border-left: 2px solid transparent;
+      transition: all 0.12s;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      color: var(--text);
+      background: var(--surface);
+      border-left-color: var(--text);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      max-width: 860px;
+      padding: 3rem 4rem;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: 3.2rem;
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .hero-sub {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 3rem; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-roman {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--tag-bg);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.03em;
+    }
+
+    /* ── ITEMS LIST ── */
+    .items-list {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .item {
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--border-light);
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.12s;
+    }
+
+    .item:last-child { border-bottom: none; }
+    .item:hover { background: var(--surface); }
+
+    .item-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      padding: 0.85rem 0.9rem;
+      min-width: 44px;
+      text-align: right;
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      background: var(--surface);
+    }
+
+    .item-body {
+      flex: 1;
+      padding: 0.75rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .item-name {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .item-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+    }
+
+    .item-arrow {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .item:hover .item-arrow { color: var(--text); }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+
+    .stat {
+      background: var(--bg);
+      padding: 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── GITHUB CARD ── */
+    .gh-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      background: var(--bg);
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.12s;
+    }
+
+    .gh-card:hover { background: var(--surface); }
+
+    .gh-card-left { display: flex; flex-direction: column; gap: 0.25rem; }
+    .gh-card-name { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; }
+    .gh-card-desc { font-size: 0.78rem; color: var(--text-muted); }
+    .gh-card-meta { display: flex; align-items: center; gap: 1rem; margin-top: 0.4rem; }
+    .gh-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      background: var(--tag-bg);
+      color: var(--text-muted);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+    .gh-stars { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+
+    .gh-card-right svg { color: var(--text-muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      max-width: 340px;
+      text-align: right;
+    }
+
+    /* ── SOCIAL ── */
+    .social-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      transition: all 0.12s;
+    }
+    .social-btn:hover { background: var(--surface); color: var(--text); }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+    .breadcrumb span { color: var(--border); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { padding: 2rem 1.5rem; }
+      .hero h1 { font-size: 2.2rem; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; }
+      .footer-quote { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ANNOUNCEMENT -->
+  <div class="announcement">
+    <span class="tag">NEW</span>
+    <span>Frappeverse Mumbai '26 — Join the annual conference on 21–22 August.&nbsp;
+      <a href="#">Register now →</a>
+    </span>
+  </div>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="logo" href="#">
+        <div class="logo-mark">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="5" height="5" rx="1"/>
+            <rect x="9" y="2" width="5" height="5" rx="1"/>
+            <rect x="2" y="9" width="5" height="5" rx="1"/>
+            <rect x="9" y="9" width="5" height="5" rx="1"/>
+          </svg>
+        </div>
+        <span class="logo-name">frappe</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="#">Home</a>
+        <a href="#">Products</a>
+        <a href="#">Partners</a>
+        <a href="#">Blog</a>
+        <a href="#">Community</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <a href="#" class="btn-login">Log in / Sign up</a>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <a href="#" class="sidebar-link active">Home</a>
+        <a href="#" class="sidebar-link">Products</a>
+        <a href="#" class="sidebar-link">Partners</a>
+        <a href="#" class="sidebar-link">Customers</a>
+        <a href="#" class="sidebar-link">Blog</a>
+        <a href="#" class="sidebar-link">Contact</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">About</div>
+        <a href="#" class="sidebar-link">Story</a>
+        <a href="#" class="sidebar-link">Culture</a>
+        <a href="#" class="sidebar-link">Team</a>
+        <a href="#" class="sidebar-link">Values</a>
+        <a href="#" class="sidebar-link">Vision</a>
+        <a href="#" class="sidebar-link">Constitution</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Resources</div>
+        <a href="#" class="sidebar-link">Events</a>
+        <a href="#" class="sidebar-link">Community</a>
+        <a href="#" class="sidebar-link">Testimonials</a>
+        <a href="#" class="sidebar-link">Incubator</a>
+        <a href="#" class="sidebar-link">Careers</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Developer</div>
+        <a href="#" class="sidebar-link">Framework Docs</a>
+        <a href="#" class="sidebar-link">GitHub</a>
+        <a href="#" class="sidebar-link">Bench CLI</a>
+        <a href="#" class="sidebar-link">Datatable</a>
+        <a href="#" class="sidebar-link">Charts</a>
+        <a href="#" class="sidebar-link">Gantt</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb">
+        <a href="#" style="color:inherit;text-decoration:none;">frappe.io</a>
+        <span>/</span>
+        <span>home</span>
+      </div>
+
+      <!-- HERO -->
+      <section class="hero">
+        <p class="hero-label">Framework + Apps</p>
+        <h1>Hello, we are <em>Frappe!</em></h1>
+        <p class="hero-sub">We build world-class free and open-source software.<br>
+          Our tools power thousands of businesses worldwide.</p>
+        <div class="social-row" style="margin-top:1.5rem;">
+          <a href="#" class="social-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="#" class="social-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            Twitter
+          </a>
+          <a href="#" class="social-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-value">350K+</span>
+          <span class="stat-label">GitHub Stars</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">15K+</span>
+          <span class="stat-label">Contributors</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">100+</span>
+          <span class="stat-label">Countries</span>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <section class="section" id="products">
+        <div class="section-header">
+          <span class="section-roman">I.</span>
+          <span class="section-title">Products</span>
+        </div>
+        <div class="items-list">
+          <a class="item" href="#">
+            <div class="item-num">1</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">ERPNext</div>
+                <div class="item-desc">Manage accounting, inventory, and operations</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">2</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Framework</div>
+                <div class="item-desc">Build and customize full-stack web applications</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">3</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Frappe HR</div>
+                <div class="item-desc">Handle employees, attendance, payroll, and HR processes</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">4</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">CRM</div>
+                <div class="item-desc">Track leads, contacts, deals, and customer interactions</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">5</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Helpdesk</div>
+                <div class="item-desc">Deliver customer support through tickets and workflows</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">6</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Builder</div>
+                <div class="item-desc">Create websites and pages visually without writing code</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">7</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Insights</div>
+                <div class="item-desc">Analyze data and create interactive dashboards and reports</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">8</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Drive</div>
+                <div class="item-desc">Store, share, and collaborate on documents</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">9</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Gameplan</div>
+                <div class="item-desc">Plan work, share updates, and track progress across teams</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">10</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Press</div>
+                <div class="item-desc">Full service cloud hosting for the Frappe stack</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section class="section" id="services">
+        <div class="section-header">
+          <span class="section-roman">II.</span>
+          <span class="section-title">Services</span>
+        </div>
+        <div class="items-list">
+          <a class="item" href="#">
+            <div class="item-num">11</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Cloud</div>
+                <div class="item-desc">The official cloud platform for Frappe applications</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">12</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">School</div>
+                <div class="item-desc">Makes learning ERPNext easier for the world</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="section" id="about">
+        <div class="section-header">
+          <span class="section-roman">III.</span>
+          <span class="section-title">About Frappe</span>
+        </div>
+        <div class="items-list">
+          <a class="item" href="#">
+            <div class="item-num">13</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Story</div>
+                <div class="item-desc">A look at our humble beginnings</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">14</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Culture</div>
+                <div class="item-desc">Know about our principles and philosophy</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">15</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Values</div>
+                <div class="item-desc">The building blocks of our culture</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">16</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Vision</div>
+                <div class="item-desc">The forces that drive Frappe</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- LIBRARIES -->
+      <section class="section" id="libraries">
+        <div class="section-header">
+          <span class="section-roman">IV.</span>
+          <span class="section-title">Libraries</span>
+        </div>
+        <a class="gh-card" href="#">
+          <div class="gh-card-left">
+            <span class="gh-card-name">frappe/frappe</span>
+            <span class="gh-card-desc">Low code web framework in Python &amp; JS</span>
+            <div class="gh-card-meta">
+              <span class="gh-tag">Python</span>
+              <span class="gh-tag">JavaScript</span>
+              <span class="gh-stars">★ 8.2k</span>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a class="gh-card" href="#">
+          <div class="gh-card-left">
+            <span class="gh-card-name">frappe/bench</span>
+            <span class="gh-card-desc">CLI tool for managing multi-tenant Frappe deployments</span>
+            <div class="gh-card-meta">
+              <span class="gh-tag">Python</span>
+              <span class="gh-stars">★ 2.1k</span>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a class="gh-card" href="#">
+          <div class="gh-card-left">
+            <span class="gh-card-name">frappe/charts</span>
+            <span class="gh-card-desc">Simple, responsive, modern SVG charts with zero dependencies</span>
+            <div class="gh-card-meta">
+              <span class="gh-tag">JavaScript</span>
+              <span class="gh-stars">★ 14.9k</span>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a class="gh-card" href="#">
+          <div class="gh-card-left">
+            <span class="gh-card-name">frappe/datatable</span>
+            <span class="gh-card-desc">A simple, modern and interactive datatable for the web</span>
+            <div class="gh-card-meta">
+              <span class="gh-tag">JavaScript</span>
+              <span class="gh-stars">★ 1.2k</span>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </section>
+
+      <!-- COMMUNITY -->
+      <section class="section" id="community">
+        <div class="section-header">
+          <span class="section-roman">V.</span>
+          <span class="section-title">People &amp; Community</span>
+        </div>
+        <div class="items-list">
+          <a class="item" href="#">
+            <div class="item-num">17</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Blog</div>
+                <div class="item-desc">Stories behind the magic</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">18</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Events</div>
+                <div class="item-desc">Connect and network with the community</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">19</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">The Frappe Times</div>
+                <div class="item-desc">Monthly newsletter for the latest updates</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">20</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Careers</div>
+                <div class="item-desc">Know about our principles and philosophies</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+          <a class="item" href="#">
+            <div class="item-num">21</div>
+            <div class="item-body">
+              <div>
+                <div class="item-name">Contributors</div>
+                <div class="item-desc">Celebrating those who truly uplift Frappe</div>
+              </div>
+              <span class="item-arrow">→</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="#">Home</a>
+      <a href="#">Products</a>
+      <a href="#">Partners</a>
+      <a href="#">Certifications</a>
+      <a href="#">Contact</a>
+      <a href="#">Terms</a>
+      <a href="#">GitHub</a>
+    </div>
+    <div class="footer-quote">
+      "To err is human, to forgive is design." — Andrew Dillon
+    </div>
+  </footer>
+
+</body>
+</html>
